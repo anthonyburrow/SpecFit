@@ -1,0 +1,2 @@
+# SpecFit
+Generalized spectrum fitter

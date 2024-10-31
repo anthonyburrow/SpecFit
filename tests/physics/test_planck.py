@@ -1,3 +1,5 @@
+import numpy as np
+
 from SpecFit.physics.planck import planck
 from SpecFit.physics.constants import c
 
@@ -14,3 +16,17 @@ def test_planck():
     # Check differential conversion between B_lam and B_nu (within some accuracy)
     result = (c / ang_to_cm) * bb_wave / (nu**2 * bb_freq)
     assert abs(1. - result) < 1e-10
+
+
+def test_plot_planck(basic_opt_spectrum, test_plot_dir):
+    fig, ax = basic_opt_spectrum
+
+    T_arr = np.linspace(5000., 10000., 8)
+    wave = np.linspace(3000., 9000.)
+
+    for T in T_arr:
+        flux = planck(wave, T)
+        ax.plot(wave, flux)
+
+    fn = f'{test_plot_dir}/planck.png'
+    fig.savefig(fn)

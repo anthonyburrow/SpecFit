@@ -4,7 +4,7 @@ from matplotlib.ticker import MultipleLocator, FuncFormatter, NullFormatter
 
 
 @pytest.fixture
-def basic_opt_spectrum(test_plot_dir):
+def basic_opt_spectrum():
     fig, ax = plt.subplots(dpi=125)
 
     ax.grid(which='both', axis='x')
@@ -26,7 +26,7 @@ def basic_opt_spectrum(test_plot_dir):
 
 
 @pytest.fixture
-def basic_opt_nir_spectrum(test_plot_dir):
+def basic_opt_nir_spectrum():
     fig, ax = plt.subplots(dpi=125)
 
     ax.grid(which='both', axis='x')

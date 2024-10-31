@@ -39,8 +39,8 @@ def planck_freq(
 
 def planck_wave(
     wave: float | np.ndarray,
-    T: float,
-    a: float = 1.,
+    T_planck: float,
+    a_planck: float = 1.,
 ) -> float | np.ndarray:
     """Planck function as a function of wavelength.
 
@@ -48,9 +48,9 @@ def planck_wave(
     ----------
     wave : float or np.ndarray
         Wavelength given in Angstroms.
-    T : float
+    T_planck : float
         Blackbody temperature.
-    a : float
+    a_planck : float
 
     Returns
     -------
@@ -59,8 +59,8 @@ def planck_wave(
     """
     wave_cm = wave * 1.e-8
 
-    exp = np.exp(-h * c / (wave_cm * k_B * T))
-    planck = a * (2. * h * c**2 / wave_cm**5) * exp / (1. - exp)
+    exp = np.exp(-h * c / (wave_cm * k_B * T_planck))
+    planck = a_planck * (2. * h * c**2 / wave_cm**5) * exp / (1. - exp)
     planck *= 1.e-8
 
     # Remove negative output

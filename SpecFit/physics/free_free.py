@@ -1,9 +1,14 @@
 import numpy as np
 from numpy.polynomial.polynomial import Polynomial
 from scipy.interpolate import lagrange
+from pathlib import Path
 
 from .constants import h, c, k_B, Ryd
 from .planck import planck
+
+
+DATA_DIR = Path(__file__).parents[2].absolute() / 'data'
+FILE_GAUNT_TABLE = DATA_DIR / 'gauntff.dat'
 
 
 def read_params(fn: str) -> dict:
@@ -60,9 +65,8 @@ def interpolate_gaunt(
     log_gamma2 = np.log10(gamma2)
 
     # Setup interpolation
-    fn = './data/gauntff.dat'
-    table_params = read_params(fn)
-    gaunt_table = read_table(fn, table_params['N_u'])
+    table_params = read_params(FILE_GAUNT_TABLE)
+    gaunt_table = read_table(FILE_GAUNT_TABLE, table_params['N_u'])
 
     # Interpolate Gaunt factor
     log_gamma2_min = table_params['log_gamma2_min']
@@ -119,10 +123,10 @@ def kappa_ff(
 
 def ff(
     wave: np.ndarray,
-    T: float,
-    a: float = 1.,
+    T_ff: float,
+    a_ff: float = 1.,
 ) -> float | np.ndarray:
-    kappa = kappa_ff(wave, T)
-    j_lam = a * kappa * planck(wave, T)
+    kappa = kappa_ff(wave, T_ff)
+    j_lam = a_ff * kappa * planck(wave, T_ff)
 
     return j_lam

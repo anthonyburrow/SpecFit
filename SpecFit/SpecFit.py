@@ -5,8 +5,9 @@ from lmfit import Model, Parameters
 from spextractor.util.io import load_spectra
 from spextractor.util.preprocessing import preprocess
 
-from .physics.planck import planck_wave
-from .physics.free_free import ff
+from .models.wrappers import planck_wrapper, ff_wrapper
+# from .physics.planck import planck_wave
+# from .physics.free_free import ff
 from .plotting.plot import plot_spectrum
 
 
@@ -65,8 +66,10 @@ class SpecFit:
 
     def _parse_model(self, model: str | Callable) -> Callable:
         if model in ('planck', 'bb'):
-            return planck_wave
+            return planck_wrapper
+            # return planck_wave
         elif model in ('free_free', 'ff'):
-            return ff
+            # return ff
+            return ff_wrapper
 
         return model

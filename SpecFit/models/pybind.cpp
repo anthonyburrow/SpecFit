@@ -37,6 +37,7 @@ PYBIND11_MODULE(SpecFitModels, module_handle) {
     module_handle.def(
         "ff",
         &jFF,
-        py::arg("wave"), py::arg("T_ff"), py::arg("a_ff") = 1.0
+        py::arg("wave"), py::arg("T_ff"), py::arg("a_ff") = 1.0,
+        py::arg("gaunt_params"), py::arg("gaunt_table")
     );
 }

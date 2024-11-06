@@ -7,9 +7,9 @@ namespace py = pybind11;
 
 double calcFreq(const double& wave);
 double interpLagrange(
-    const double &x,
-    const vector<double>& xTable
-    const vector<double>& yTable
+    const double& x,
+    const std::vector<double>& xTable,
+    const std::vector<double>& yTable
 );
 double interpolateGaunt(
     const double& wave,

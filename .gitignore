@@ -6,5 +6,6 @@ build
 
 examples/*.dat
 examples/*.png
-data/*.dat
 tests/output
+
+SpecFit/data/*.dat

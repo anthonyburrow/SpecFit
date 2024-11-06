@@ -27,6 +27,9 @@ setup(
     install_requires=['numpy', 'scipy>=1.3.0,<=1.12.0', 'lmfit'],
     optional=['matplotlib'],
     packages=find_packages(),
+    package_data={
+        'SpecFit': ['data/*.dat'],
+    },
     ext_modules=ext_modules,
     extras_require={'test': 'pytest'},
     cmdclass={'build_ext': build_ext},

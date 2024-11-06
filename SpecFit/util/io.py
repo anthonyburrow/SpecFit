@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 
 
-DATA_DIR = Path(__file__).parents[2].absolute() / 'data'
+DATA_DIR = Path(__file__).parents[1].absolute() / 'data'
 FILE_GAUNT_TABLE = DATA_DIR / 'gauntff.dat'
 
 

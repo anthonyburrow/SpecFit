@@ -9,7 +9,7 @@ from .models.wrappers import planck_wrapper, ff_wrapper
 # from .physics.planck import planck_wave
 # from .physics.free_free import ff
 from .plotting.plot import plot_spectrum
-from .util.io import read_gaunt_params, read_gaunt_table
+# from .util.io import read_gaunt_params, read_gaunt_table
 
 
 class SpecFit:
@@ -22,10 +22,11 @@ class SpecFit:
             self.data = data
 
         self.data = preprocess(self.data, *args, **kwargs)
+        self.data[:, 1] /= self.data[:, 1].max()
+        self.data[:, 2] /= self.data[:, 1].max()
 
         self.model = None
         self.params = Parameters()
-        self.static_args = {}
         self.result = None
 
     def add_model(self, model: str | Callable, params: dict):
@@ -46,15 +47,13 @@ class SpecFit:
         else:
             self.model += model
 
-        for param_key in model.param_names:
-            if param_key not in params:
-                raise Exception(f'{param_key} parameter not provided.')
-            self.params.add(param_key, **params[param_key])
+        for param_key, param_info in params.items():
+            self.params.add(param_key, **param_info)
 
     def fit(self, *args, **kwargs):
         result = self.model.fit(
             self.data[:, 1], self.params, wave=self.data[:, 0],
-            *args, **self.static_args, **kwargs
+            *args, **kwargs
         )
         self.result = result
         return result
@@ -72,10 +71,6 @@ class SpecFit:
             return planck_wrapper
             # return planck_wave
         elif model in ('free_free', 'ff'):
-            self.static_args['gaunt_params'] = read_gaunt_params()
-            N_lines = self.static_args['gaunt_params']['N_u']
-            self.static_args['gaunt_table'] = read_gaunt_table(N_lines)
-
             # return ff
             return ff_wrapper
 

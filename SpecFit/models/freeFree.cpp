@@ -11,19 +11,19 @@ namespace py = pybind11;
 
 double calcFreq(const double& wave)
 {
-    nu = c / (wave * 1e-8);
+    const double nu = c / (wave * 1e-8);
     return nu;
 }
 
 double interpLagrange(
     const double &x,
-    const vector<double>& xTable
+    const vector<double>& xTable,
     const vector<double>& yTable)
 {
     double y = 0.0;
 
-    const int N = xTable.size();
-    for (int i = 0; i < N, i++)
+    const size_t N = xTable.size();
+    for (int i = 0; i < N; i++)
     {
         double coeff = 1.0;
         for (int j = 0; j < N; j++)
@@ -49,7 +49,7 @@ double interpolateGaunt(
     const double& logUMin = gauntParams["log_u_min"].cast<double>();
     const int& NGamma2 = gauntParams["N_gamma2"].cast<int>();
     const int& NU = gauntParams["N_u"].cast<int>();
-    const double& step = gauntParams['step'].cast<double>();
+    const double& step = gauntParams["step"].cast<double>();
 
     const double nu = calcFreq(wave);
     const double u = h * nu / (kB * TFF);
@@ -82,12 +82,12 @@ double interpolateGaunt(
     for (int i = 0; i < NInterp; i++)
     {
         addedLogU = static_cast<double>(indU + i) * step;
-        interpU[i] = logUMin + addedU;
+        interpU[i] = logUMin + addedLogU;
     }
 
     // Interpolate across gamma2 dimension
     const py::buffer_info gauntBuffer = gauntTable.request();
-    auto gauntTableValues = static_cast<double*>(buffer_info.ptr);
+    auto gauntTableValues = static_cast<double*>(gauntBuffer.ptr);
     vector<double> interpTable(NInterp);
     for (int i = 0; i < NInterp; i++)
     {
@@ -118,8 +118,8 @@ double kappaFF(
     const py::dict& gauntParams,
     const py::array_t<double>& gauntTable)
 {
-    const double gaunt = interpolate_gaunt(wave, TFF);
-    const int Z = 1.   // Hydrogen
+    const double gaunt = interpolateGaunt(wave, TFF, gauntParams, gauntTable);
+    const double Z = 1.0;   // Hydrogen
     const double nu = calcFreq(wave);
     const double u = h * nu / (kB * TFF);
 
@@ -143,12 +143,13 @@ py::array_t<double> jFF(
 
     double kappa;
     double w;
-    for (size_t i = 0; i < waveBuffer.shape[0]; i++)
+    const double arbitraryScale = 1e31;
+    for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
         // Because wave.request() requested the entire (N, 3) spectrum
         w = wavePtr[i * 3];
         kappa = kappaFF(w, TFF, gauntParams, gauntTable);
-        outPtr[i] = aFF * kappa * planck(w, TFF, 1.0);
+        outPtr[i] = arbitraryScale * aFF * kappa * planckFunc(w, TFF, 1.0);
     }
 
     return out;

@@ -1,11 +1,17 @@
 import numpy as np
+
 from SpecFitModels import planck, ff
+from ..util.io import read_gaunt_params, read_gaunt_table
+
+
+GAUNT_PARAMS = read_gaunt_params()
+GAUNT_TABLE = read_gaunt_table(GAUNT_PARAMS['N_u'])
 
 
 def planck_wrapper(
     wave: np.ndarray,
     T_planck: float,
-    a_planck: float
+    a_planck: float,
 ) -> np.ndarray:
     return planck(wave, T_planck, a_planck)
 
@@ -13,6 +19,8 @@ def planck_wrapper(
 def ff_wrapper(
     wave: np.ndarray,
     T_ff: float,
-    a_ff: float
+    a_ff: float,
+    # gaunt_params: dict,
+    # gaunt_table: np.ndarray,
 ) -> np.ndarray:
-    return ff(wave, T_ff, a_ff)
+    return ff(wave, T_ff, a_ff, GAUNT_PARAMS, GAUNT_TABLE)

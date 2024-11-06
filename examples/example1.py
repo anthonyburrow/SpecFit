@@ -12,30 +12,34 @@ spec = SpecFit(data, **read_params)
 
 params_bb = {
     'T_planck': {
-        'value': 5000.,
-        'min': 1000.,
-        'max': 20000.,
+        'value': 4000.,
+        'min': 4000.,
+        'max': 10000.,
     },
     'a_planck': {
-        'value': 1.e-7,
+        'value': 1.,
     },
 }
 spec.add_model('bb', params_bb)
 
-# params_ff = {
-#     'a_ff': {
-#         'value': 1e-17,
-#         'min': 0.,
-#     },
-#     'T_ff': {
-#         'value': 6000.,
-#         'min': 1000.,
-#         'max': 20000.,
-#     },
-# }
-# spec.add_model('ff', params_ff)
+params_ff = {
+    'T_ff': {
+        'value': 6197.,
+        'min': 1000.,
+        'max': 20000.,
+        # 'vary': False
+    },
+    'a_ff': {
+        'value': 1.,
+        'min': 0.,
+    },
+}
+spec.add_model('ff', params_ff)
 
-spec.fit()
+fit_params = {
+    # 'method': 'emcee',
+}
+spec.fit(**fit_params)
 
 spec.fit_report()
 

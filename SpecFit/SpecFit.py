@@ -6,10 +6,7 @@ from spextractor.util.io import load_spectra
 from spextractor.util.preprocessing import preprocess
 
 from .models.wrappers import planck_wrapper, ff_wrapper
-# from .physics.planck import planck_wave
-# from .physics.free_free import ff
 from .plotting.plot import plot_spectrum
-# from .util.io import read_gaunt_params, read_gaunt_table
 
 
 class SpecFit:
@@ -64,7 +61,8 @@ class SpecFit:
         return fit_report
 
     def plot(self, *args, **kwargs):
-        return plot_spectrum(self.data, self.result, *args, **kwargs)
+        return plot_spectrum(data=self.data, model_result=self.result,
+                             *args, **kwargs)
 
     def _parse_model(self, model: str | Callable) -> Callable:
         if model in ('planck', 'bb'):

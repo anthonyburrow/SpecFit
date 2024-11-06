@@ -44,4 +44,4 @@ spec.fit(**fit_params)
 spec.fit_report()
 
 fn = 'test_plot.png'
-spec.plot(fn, plot_type='nir')
+spec.plot(out_filename=fn, plot_type='nir', residuals=True)

@@ -2,9 +2,12 @@ import numpy as np
 from SpecFit.SpecFit import SpecFit
 
 
+# Get spectrum data if file has unusual format
 fn = 'sn2023ixf_visit1_combined_v3.dat'
 data = np.loadtxt(fn, usecols=(0, 2, 3), skiprows=1)
 data[:, 0] *= 1e4
+
+# Load and preprocess spectrum
 read_params = {
     'z': 0.0008,
 }
@@ -34,7 +37,7 @@ params_ff = {
         'min': 0.,
     },
 }
-spec.add_model('ff', params_ff)
+# spec.add_model('ff', params_ff)
 
 fit_params = {
     # 'method': 'emcee',

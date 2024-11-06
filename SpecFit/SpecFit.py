@@ -6,7 +6,12 @@ from spextractor.util.io import load_spectra
 from spextractor.util.preprocessing import preprocess
 
 from .models.wrappers import planck_wrapper, ff_wrapper
+from .util.default_params import default_params
 from .plotting.plot import plot_spectrum
+
+
+PLANCK_MODEL_KEYS = ('planck', 'bb')
+FF_MODEL_KEYS = ('free_free', 'ff')
 
 
 class SpecFit:
@@ -26,7 +31,7 @@ class SpecFit:
         self.params = Parameters()
         self.result = None
 
-    def add_model(self, model: str | Callable, params: dict):
+    def add_model(self, model: str | Callable, params: dict = None):
         """Add a model to the current overall model.
 
         Parameters
@@ -37,15 +42,27 @@ class SpecFit:
             ('planck', 'free_free').
         """
         model_func = self._parse_model(model)
-        model = Model(model_func)
+        model_obj = Model(model_func)
 
         if self.model is None:
-            self.model = model
+            self.model = model_obj
         else:
-            self.model += model
+            self.model += model_obj
 
-        for param_key, param_info in params.items():
-            self.params.add(param_key, **param_info)
+        for param in self.model.param_names:
+            if params is None:
+                param_func = default_params[param]
+                param_info = param_func(self.data)
+                self.params.add(param, **param_info)
+            elif param in params:
+                param_info = params[param]
+                self.params.add(param, **param_info)
+            elif param in default_params:
+                param_func = default_params[param]
+                param_info = param_func(self.data)
+                self.params.add(param, **param_info)
+            else:
+                print(f'{param} not given an initial value.')
 
     def fit(self, *args, **kwargs):
         result = self.model.fit(
@@ -65,9 +82,9 @@ class SpecFit:
                              *args, **kwargs)
 
     def _parse_model(self, model: str | Callable) -> Callable:
-        if model in ('planck', 'bb'):
+        if model in PLANCK_MODEL_KEYS:
             return planck_wrapper
-        elif model in ('free_free', 'ff'):
+        elif model in FF_MODEL_KEYS:
             return ff_wrapper
 
         return model

@@ -67,9 +67,7 @@ class SpecFit:
     def _parse_model(self, model: str | Callable) -> Callable:
         if model in ('planck', 'bb'):
             return planck_wrapper
-            # return planck_wave
         elif model in ('free_free', 'ff'):
-            # return ff
             return ff_wrapper
 
         return model

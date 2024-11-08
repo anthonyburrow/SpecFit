@@ -1,5 +1,7 @@
 import numpy as np
 
+from SpectrumCore.plot import setup_plot
+
 from SpecFitModels import ff
 from SpecFit.util.io import read_gaunt_params, read_gaunt_table
 
@@ -15,8 +17,8 @@ def test_free_free():
            gaunt_params=gaunt_params, gaunt_table=gaunt_table)
 
 
-def test_plot_free_free(basic_opt_nir_spectrum, test_plot_dir):
-    fig, ax = basic_opt_nir_spectrum
+def test_plot_free_free(output_dir):
+    fig, ax = setup_plot(plot_type='nir')
 
     T_arr = np.linspace(5000., 10000., 8)
     wave = np.linspace(0.3, 3.)
@@ -29,5 +31,5 @@ def test_plot_free_free(basic_opt_nir_spectrum, test_plot_dir):
                   gaunt_params=gaunt_params, gaunt_table=gaunt_table)
         ax.plot(wave, flux)
 
-    fn = f'{test_plot_dir}/free_free.png'
+    fn = f'{output_dir}/free_free.png'
     fig.savefig(fn)

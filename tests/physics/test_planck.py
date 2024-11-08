@@ -1,5 +1,7 @@
 import numpy as np
 
+from SpectrumCore.plot import setup_plot
+
 from SpecFitModels import planck
 
 
@@ -10,8 +12,8 @@ def test_planck():
     planck(wave, T_planck=T_bb)
 
 
-def test_plot_planck(basic_opt_spectrum, test_plot_dir):
-    fig, ax = basic_opt_spectrum
+def test_plot_planck(output_dir):
+    fig, ax = setup_plot(plot_type='optical')
 
     T_arr = np.linspace(5000., 10000., 8)
     wave = np.linspace(3000., 9000.)
@@ -20,5 +22,5 @@ def test_plot_planck(basic_opt_spectrum, test_plot_dir):
         flux = planck(wave, T_planck=T)
         ax.plot(wave, flux)
 
-    fn = f'{test_plot_dir}/planck.png'
+    fn = f'{output_dir}/planck.png'
     fig.savefig(fn)

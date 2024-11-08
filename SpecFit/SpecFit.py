@@ -4,10 +4,10 @@ from lmfit import Model, Parameters
 
 from SpectrumCore.io import read
 from SpectrumCore.processing import preprocess
+from SpectrumCore.plot import plot_spectrum
 
 from .models.wrappers import planck_wrapper, ff_wrapper
 from .util.default_params import default_params
-from .plotting.plot import plot_spectrum
 
 
 PLANCK_MODEL_KEYS = ('planck', 'bb')

@@ -2,8 +2,8 @@ import numpy as np
 from typing import Callable
 from lmfit import Model, Parameters
 
-from spextractor.util.io import load_spectra
-from spextractor.util.preprocessing import preprocess
+from SpectrumCore.io import read
+from SpectrumCore.processing import preprocess
 
 from .models.wrappers import planck_wrapper, ff_wrapper
 from .util.default_params import default_params
@@ -18,14 +18,13 @@ class SpecFit:
 
     def __init__(self, data: str | np.ndarray, *args, **kwargs):
         if isinstance(data, str):
-            self.data = load_spectra(data)
+            self.data = read(data)
         else:
             # data = data.copy()
             self.data = data
 
+        kwargs['normalize'] = True
         self.data = preprocess(self.data, *args, **kwargs)
-        self.data[:, 1] /= self.data[:, 1].max()
-        self.data[:, 2] /= self.data[:, 1].max()
 
         self.model = None
         self.params = Parameters()

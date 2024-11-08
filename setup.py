@@ -28,7 +28,7 @@ setup(
     optional=['matplotlib'],
     packages=find_packages(),
     ext_modules=ext_modules,
-    extras_require={'test': 'pytest'},
+    extras_require={'test': ['pytest', 'requests']},
     cmdclass={'build_ext': build_ext},
     classifiers=[
         'Programming Language :: Python',

@@ -17,24 +17,7 @@ PYBIND11_MODULE(SpecFitModels, module_handle) {
         &planck,
         py::arg("wave"), py::arg("T_planck"), py::arg("a_planck") = 1.0
     );
-
-    // This de-vectorizes `T` and `a` arguments, but it doesn't really improve
-    // performance...
-    // module_handle.def(
-    //     "planck",
-    //     [](const py::array_t<double> &wave,
-    //        const double& TPlanck,
-    //        const double& aPlanck)
-    //     {
-    //         return py::vectorize(
-    //             [&TPlanck, &aPlanck](const double& wave)
-    //             {
-    //                 return planck(wave, TPlanck, aPlanck);
-    //             }
-    //         )(std::move(wave));
-    //     },
-    //     py::arg("wave"), py::arg("T_planck"), py::arg("a_planck") = 1.0
-    // );
+    // Free-free
     module_handle.def(
         "ff",
         &jFF,

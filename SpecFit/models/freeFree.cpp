@@ -130,8 +130,11 @@ double kappaFF(
 
 
 py::array_t<double> jFF(
-    const py::array_t<double>& wave, const double& TFF, const double& aFF,
-    const py::dict& gauntParams, const py::array_t<double>& gauntTable)
+    const py::array_t<double>& wave,
+    const double& TFF,
+    const double& aFF,
+    const py::dict& gauntParams,
+    const py::array_t<double>& gauntTable)
 {
     py::buffer_info waveBuffer = wave.request();
 

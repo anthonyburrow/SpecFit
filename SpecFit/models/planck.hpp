@@ -8,8 +8,10 @@ namespace py = pybind11;
 double planckFunc(
     const double& wave,
     const double& TPlanck,
-    const double& aPlanck);
+    const double& aPlanck
+);
 py::array_t<double> planck(
     py::array_t<double>& wave,
     double& TPlanck,
-    double& aPlanck);
+    double& aPlanck
+);

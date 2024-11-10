@@ -6,7 +6,10 @@
 
 namespace py = pybind11;
 
-double planckFunc(const double& wave, const double& TPlanck, const double& aPlanck)
+double planckFunc(
+    const double& wave,
+    const double& TPlanck,
+    const double& aPlanck)
 {
     const double waveCm = wave * 1e-8;
 
@@ -22,7 +25,10 @@ double planckFunc(const double& wave, const double& TPlanck, const double& aPlan
     return planck;
 }
 
-py::array_t<double> planck(py::array_t<double>& wave, double& TPlanck, double& aPlanck)
+py::array_t<double> planck(
+    py::array_t<double>& wave,
+    double& TPlanck,
+    double& aPlanck)
 {
     py::buffer_info waveBuffer = wave.request();
 

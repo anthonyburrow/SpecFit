@@ -31,7 +31,7 @@ def default_T_ff(data: np.ndarray, *args, **kwargs) -> dict:
 
     param_info = {
         'value': T,
-        'min': 3000.,
+        'min': 0.,
         'max': 20000.,
     }
 

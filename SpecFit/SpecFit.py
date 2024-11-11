@@ -16,12 +16,19 @@ FF_MODEL_KEYS = ('free_free', 'ff')
 
 class SpecFit:
 
-    def __init__(self, data: str | np.ndarray, *args, **kwargs):
+    def __init__(self, data: str | np.ndarray, wave_units=None,
+                 *args, **kwargs):
         if isinstance(data, str):
             self.data = read(data)
         else:
             # data = data.copy()
             self.data = data
+
+        if wave_units is None:
+            wave_units = 'angstroms'
+
+        if wave_units == 'microns':
+            self.data[:, 0] *= 1.e4
 
         kwargs['normalize'] = True
         self.data = preprocess(self.data, *args, **kwargs)
@@ -77,7 +84,7 @@ class SpecFit:
         return fit_report
 
     def plot(self, *args, **kwargs):
-        return plot_spectrum(data=self.data, model_result=self.result,
+        return plot_spectrum(self.data, model_result=self.result,
                              *args, **kwargs)
 
     def _parse_model(self, model: str | Callable) -> Callable:

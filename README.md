@@ -85,11 +85,11 @@ models in C++:
     spec.add_model('free_free')
     ```
 
-Default parameters are determined during this step for premade models; however
-one may optionally provide initial parameters to `add_model` in the same manner
-as for `lmfit`. See examples for details. If providing a custom callable
-function to `add_model`, providing initial guesses for parameters will be
-necessary.
+    Default parameters are determined during this step for premade models;
+    however, one may optionally provide initial parameters to `add_model` in
+    the same manner as for `lmfit`. See examples for details. If providing a
+    custom callable function to `add_model`, providing initial guesses for
+    parameters will be necessary.
 
 3. Fit the parameters of the provided model.
 
@@ -97,10 +97,10 @@ necessary.
     spec.fit()
     ```
 
-This method essentially calls the `lmfit.Model.fit()` method with appropriate
-arguments provided to it. However, `SpecFit.fit()` passes any additional
-keyword-arguments given to it directly to the `lmfit.Model.fit()` method (see
-examples).
+    This method essentially calls the `lmfit.Model.fit()` method with
+    appropriate arguments provided to it. However, `SpecFit.fit()` passes any
+    additional keyword-arguments given to it directly to the
+    `lmfit.Model.fit()` method (see examples).
 
 4. After fitting, data analysis can occur. Best-fit parameters can be viewed
 with `SpecFit.fit_report()`, or a plot may be retrieved with `SpecFit.plot()`.

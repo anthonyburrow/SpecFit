@@ -46,4 +46,4 @@ spec.fit(**fit_params)
 spec.fit_report()
 
 fn = 'test_plot.png'
-spec.plot(out_filename=fn, residuals=True)
+fig, ax, ax_res = spec.plot(out_filename=fn, residuals=True)

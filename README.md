@@ -1,4 +1,6 @@
 # SpecFit
+
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anthonyburrow/SpecFit/run_pytest.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 `SpecFit` is designed to be a versatile spectrum-fitting tool. Utilizing the

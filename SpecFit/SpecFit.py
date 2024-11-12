@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Callable
-from lmfit import Model, Parameters, ModelResult
+from lmfit import Model, Parameters
+from lmfit.model import ModelResult
 
 from SpectrumCore.io import read
 from SpectrumCore.processing import preprocess

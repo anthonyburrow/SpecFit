@@ -104,7 +104,7 @@ class SpecFit:
         else:
             self.model += model_obj
 
-        for param in self.model.param_names:
+        for param in model_obj.param_names:
             if params is None:
                 param_func = default_params[param]
                 param_info = param_func(self.data)

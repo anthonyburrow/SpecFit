@@ -34,7 +34,7 @@ site-packages `SpecFit` directory upon installation (the following step).
 ### Building
 
 The Python bindings of the C++ modeling code must be built first before using
-this package. The 'setup.py' and `pyproject.toml` handle this automatically;
+this package. The 'setup.py' and 'pyproject.toml' handle this automatically;
 to install `SpecFit`, simply do so using:
 ```shell
 python -m pip install path/to/SpecFit

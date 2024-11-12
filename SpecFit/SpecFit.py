@@ -136,6 +136,7 @@ class SpecFit:
         """
         result = self.model.fit(
             self.data[:, 1], self.params, wave=self.data[:, 0],
+            weights=1. / self.data[:, 1],
             *args, **kwargs
         )
         self.result = result

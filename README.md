@@ -5,10 +5,11 @@
 Python package `lmfit`, this tool performs non-linear least-squares
 minimization to accurately model astrophysical spectra. `SpecFit` streamlines
 the process of deriving physical parameters such as blackbody temperature by
-integrating an internal preprocessing pipeline. With the support of `pybind11`
-and C++, `SpecFit` allows for the iteration of complex (non-vectorizable)
-models within `lmfit`, combining Python's simplicity to perform data analysis
-with the computational efficiency of C++.
+integrating an internal preprocessing pipeline. With the support of
+[`pybind11`](https://github.com/pybind/pybind11) and C++, `SpecFit` allows for
+the iteration of complex (non-vectorizable) models within `lmfit`, combining
+Python's simplicity to perform data analysis with the computational efficiency
+of C++.
 
 ## Installation
 
@@ -31,15 +32,8 @@ site-packages `SpecFit` directory upon installation (the following step).
 ### Building
 
 The Python bindings of the C++ modeling code must be built first before using
-this package. The 'setup.py' handles this automatically; however,
-[`pybind11`](https://github.com/pybind/pybind11) is necessary to install with
-the `setup.py`. To install `pybind11`, you can typically use:
-
-```shell
-python -m pip install pybind11
-```
-
-Afterward, to install `SpecFit`, simply do so using:
+this package. The 'setup.py' and `pyproject.toml` handle this automatically;
+to install `SpecFit`, simply do so using:
 ```shell
 python -m pip install path/to/SpecFit
 ```

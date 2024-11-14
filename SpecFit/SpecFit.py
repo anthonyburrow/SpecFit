@@ -4,7 +4,7 @@ from lmfit import Model, Parameters
 from lmfit.model import ModelResult
 
 from SpectrumCore.io import read
-from SpectrumCore.processing import preprocess
+from SpectrumCore.processing import preprocess, smooth
 from SpectrumCore.plot import plot_spectrum
 
 from .models.wrappers import model_from_key
@@ -69,8 +69,16 @@ class SpecFit:
         if wave_units == 'microns':
             self.data[:, 0] *= 1.e4
 
-        kwargs['normalize'] = True
+        # Preprocess and smooth (normalize at the end)
         self.data = preprocess(self.data, *args, **kwargs)
+        self.data = smooth(self.data, *args, **kwargs)
+
+        norm_args = {
+            'remove_nans': False,
+            'remove_nonpositive': False,
+            'normalize': True,
+        }
+        self.data = preprocess(self.data, **norm_args)
 
         self.model = None
         self.params = Parameters()

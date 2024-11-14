@@ -7,12 +7,8 @@ from SpectrumCore.io import read
 from SpectrumCore.processing import preprocess
 from SpectrumCore.plot import plot_spectrum
 
-from .models.wrappers import planck_wrapper, ff_wrapper
+from .models.wrappers import model_from_key
 from .util.default_params import default_params
-
-
-PLANCK_MODEL_KEYS = ('planck', 'bb')
-FF_MODEL_KEYS = ('free_free', 'ff')
 
 
 class SpecFit:
@@ -97,7 +93,9 @@ class SpecFit:
             automatically provided.
         """
         model_func = self._parse_model(model)
-        model_obj = Model(model_func)
+        model_name = model if isinstance(model, str) else model.__name__
+
+        model_obj = Model(model_func, name=model_name)
 
         if self.model is None:
             self.model = model_obj
@@ -134,12 +132,15 @@ class SpecFit:
         lmfit.ModelResult
             The `ModelResult` object given by `lmfit.Model.fit()`.
         """
+        weights = 1. / self.data[:, 1]
+
         result = self.model.fit(
             self.data[:, 1], self.params, wave=self.data[:, 0],
-            weights=1. / self.data[:, 1],
+            weights=weights,
             *args, **kwargs
         )
         self.result = result
+
         return result
 
     def fit_report(self) -> str:
@@ -189,9 +190,8 @@ class SpecFit:
                              *args, **kwargs)
 
     def _parse_model(self, model: str | Callable) -> Callable:
-        if model in PLANCK_MODEL_KEYS:
-            return planck_wrapper
-        elif model in FF_MODEL_KEYS:
-            return ff_wrapper
+        """Retrieve the function from premade function keys."""
+        if model in model_from_key:
+            return model_from_key[model]
 
         return model

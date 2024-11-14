@@ -24,3 +24,13 @@ def ff_wrapper(
     # gaunt_table: np.ndarray,
 ) -> np.ndarray:
     return ff(wave, T_ff, a_ff, GAUNT_PARAMS, GAUNT_TABLE)
+
+
+model_from_key = {
+    # Planck function
+    'planck': planck_wrapper,
+    'bb': planck_wrapper,
+    # Free-free emission
+    'free_free': ff_wrapper,
+    'ff': ff_wrapper,
+}

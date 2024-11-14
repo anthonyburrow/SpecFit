@@ -189,6 +189,10 @@ class SpecFit:
         return plot_spectrum(self.data, model_result=self.result,
                              *args, **kwargs)
 
+    @property
+    def best_fit(self):
+        return self.result.best_fit
+
     def _parse_model(self, model: str | Callable) -> Callable:
         """Retrieve the function from premade function keys."""
         if model in model_from_key:

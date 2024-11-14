@@ -119,10 +119,10 @@ class SpecFit:
                 param_func = default_params[param_no_prefix]
                 param_info = param_func(self.data)
                 self.params.add(param, **param_info)
-            elif param in params:
+            elif param_no_prefix in params:
                 param_info = params[param_no_prefix]
                 self.params.add(param, **param_info)
-            elif param in default_params:
+            elif param_no_prefix in default_params:
                 param_func = default_params[param_no_prefix]
                 param_info = param_func(self.data)
                 self.params.add(param, **param_info)

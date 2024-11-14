@@ -8,14 +8,15 @@ namespace py = pybind11;
 
 double planckFunc(
     const double& wave,
-    const double& TPlanck,
-    const double& aPlanck)
+    const double& TPlanck)
 {
     const double waveCm = wave * 1e-8;
 
-    const double expTerm = exp(-h * c / (waveCm * kB * TPlanck));
-    double planck = (2.0 * h * pow(c, 2.0) / pow(waveCm, 5.0)) * expTerm / (1.0 - expTerm);
-    planck *= aPlanck * 1e-8;
+    const double exponent = hc / (waveCm * kB * TPlanck);
+    const double expTerm = exp(-exponent);
+
+    double planck = (2.0 * hc * c / pow(waveCm, 5.0)) * expTerm / (1.0 - expTerm);
+    planck *= 1e-8;
 
     if (planck < 0.0)
     {
@@ -27,8 +28,8 @@ double planckFunc(
 
 py::array_t<double> planck(
     py::array_t<double>& wave,
-    double& TPlanck,
-    double& aPlanck)
+    const double& TPlanck,
+    const double& aPlanck)
 {
     py::buffer_info waveBuffer = wave.request();
 
@@ -40,11 +41,11 @@ py::array_t<double> planck(
 
     double w;
     const double arbitraryScale = 1e-7;
+    const int dim = wave.strides(0) / 8;
     for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
-        // Because wave.request() requested the entire (N, 3) spectrum (flattened)
-        w = wavePtr[i * 3];
-        outPtr[i] = arbitraryScale * aPlanck * planckFunc(w, TPlanck, 1.0);
+        w = wavePtr[i * dim];
+        outPtr[i] = arbitraryScale * aPlanck * planckFunc(w, TPlanck);
     }
 
     return out;

@@ -147,12 +147,12 @@ py::array_t<double> jFF(
     double kappa;
     double w;
     const double arbitraryScale = 1e31;
+    const int dim = wave.strides(0) / 8;
     for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
-        // Because wave.request() requested the entire (N, 3) spectrum
-        w = wavePtr[i * 3];
+        w = wavePtr[i * dim];
         kappa = kappaFF(w, TFF, gauntParams, gauntTable);
-        outPtr[i] = arbitraryScale * aFF * kappa * planckFunc(w, TFF, 1.0);
+        outPtr[i] = arbitraryScale * aFF * kappa * planckFunc(w, TFF);
     }
 
     return out;

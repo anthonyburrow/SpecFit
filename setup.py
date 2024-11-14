@@ -24,7 +24,7 @@ setup(
     author_email='anthony.r.burrow@gmail.com',
     license='MIT',
     include_package_data=True,
-    install_requires=['numpy', 'scipy>=1.3.0,<=1.12.0', 'lmfit'],
+    install_requires=['numpy', 'scipy', 'lmfit'],
     optional=['matplotlib'],
     packages=find_packages(),
     ext_modules=ext_modules,

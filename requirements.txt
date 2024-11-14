@@ -1,4 +1,4 @@
 numpy
-scipy >= 1.3.0, <= 1.12.0
+scipy
 lmfit
 SpectrumCore @ git+https://github.com/anthonyburrow/SpectrumCore.git

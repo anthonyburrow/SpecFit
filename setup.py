@@ -24,6 +24,9 @@ setup(
     author_email='anthony.r.burrow@gmail.com',
     license='MIT',
     include_package_data=True,
+    package_data={
+        'SpecFit': ['data/*.dat']
+    },
     install_requires=['numpy', 'scipy', 'lmfit'],
     optional=['matplotlib'],
     packages=find_packages(),

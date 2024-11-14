@@ -117,7 +117,11 @@ class SpecFit:
             else:
                 print(f'{param} not given an initial value.')
 
-    def fit(self, *args, **kwargs) -> ModelResult:
+    def fit(
+        self,
+        weights: str | np.ndarray = None,
+        *args, **kwargs
+    ) -> ModelResult:
         """Fit all parameters to the composite model.
 
         Parameters
@@ -132,7 +136,10 @@ class SpecFit:
         lmfit.ModelResult
             The `ModelResult` object given by `lmfit.Model.fit()`.
         """
-        weights = 1. / self.data[:, 1]
+        if weights is None or weights == 'log':
+            weights = 1. / self.data[:, 1]
+        elif weights == 'none':
+            weights = None
 
         result = self.model.fit(
             self.data[:, 1], self.params, wave=self.data[:, 0],

@@ -76,6 +76,8 @@ class SpecFit:
         self.params = Parameters()
         self.result = None
 
+        self.model_count = 0
+
     def add_model(self, model: str | Callable, params: dict = None):
         """Add a model to the current overall model.
 
@@ -94,8 +96,9 @@ class SpecFit:
         """
         model_func = self._parse_model(model)
         model_name = model if isinstance(model, str) else model.__name__
+        model_prefix = f'M{self.model_count}_'
 
-        model_obj = Model(model_func, name=model_name)
+        model_obj = Model(model_func, name=model_name, prefix=model_prefix)
 
         if self.model is None:
             self.model = model_obj
@@ -103,19 +106,22 @@ class SpecFit:
             self.model += model_obj
 
         for param in model_obj.param_names:
+            param_no_prefix = '_'.join(param.split('_')[1:])
             if params is None:
-                param_func = default_params[param]
+                param_func = default_params[param_no_prefix]
                 param_info = param_func(self.data)
                 self.params.add(param, **param_info)
             elif param in params:
-                param_info = params[param]
+                param_info = params[param_no_prefix]
                 self.params.add(param, **param_info)
             elif param in default_params:
-                param_func = default_params[param]
+                param_func = default_params[param_no_prefix]
                 param_info = param_func(self.data)
                 self.params.add(param, **param_info)
             else:
                 print(f'{param} not given an initial value.')
+
+        self.model_count += 1
 
     def fit(
         self,

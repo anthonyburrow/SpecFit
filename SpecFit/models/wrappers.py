@@ -1,6 +1,6 @@
 import numpy as np
 
-from SpecFitModels import planck, ff
+from SpecFitModels import planck, ff, gaussian
 from ..util.io import read_gaunt_params, read_gaunt_table
 
 
@@ -26,6 +26,15 @@ def ff_wrapper(
     return ff(wave, T_ff, a_ff, GAUNT_PARAMS, GAUNT_TABLE)
 
 
+def gaussian_wrapper(
+    wave: np.ndarray,
+    mean_gaussian: float,
+    std_gaussian: float,
+    a_gaussian: float,
+) -> np.ndarray:
+    return gaussian(wave, mean_gaussian, std_gaussian, a_gaussian)
+
+
 model_from_key = {
     # Planck function
     'planck': planck_wrapper,
@@ -33,4 +42,7 @@ model_from_key = {
     # Free-free emission
     'free_free': ff_wrapper,
     'ff': ff_wrapper,
+    # Gaussian
+    'gaussian': gaussian_wrapper,
+    'gauss': gaussian_wrapper,
 }

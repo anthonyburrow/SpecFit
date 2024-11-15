@@ -6,12 +6,11 @@ from SpectrumCore.plot import setup_plot
 from SpecFitModels import gaussian, planck
 
 
-def test_gaussian():
-    wave = np.linspace(5000., 7000., 100)
-    mean = wave.mean()
+def test_gaussian(wave_optical):
+    mean = wave_optical.mean()
     std = 50.
 
-    gaussian(wave, mean_gaussian=mean, std_gaussian=std)
+    gaussian(wave_optical, mean_gaussian=mean, std_gaussian=std)
 
 
 def test_plot_gaussian(output_dir):
@@ -36,11 +35,10 @@ def test_plot_gaussian(output_dir):
     plt.close('all')
 
 
-def test_plot_gaussian_feature(output_dir):
+def test_plot_gaussian_feature(output_dir, wave_optical, T_representative):
     fig, ax = setup_plot(plot_type='optical')
 
-    wave = np.linspace(3000., 9000.)
-    T_bb = 7000.
+    wave = wave_optical.copy()
 
     features = np.array([
         [4000., 50., -0.1],
@@ -55,7 +53,7 @@ def test_plot_gaussian_feature(output_dir):
 
     wave.sort()
 
-    flux = planck(wave, T_planck=T_bb)
+    flux = planck(wave, T_planck=T_representative)
     flux /= flux.max()
 
     for feat_params in features:

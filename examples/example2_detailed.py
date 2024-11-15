@@ -10,6 +10,7 @@ data = np.loadtxt(fn, usecols=(0, 2, 3), skiprows=1)
 read_params = {
     'z': 0.0008,
     'wave_units': 'microns',
+    'smooth_method': 'boxcar',
 }
 spec = SpecFit(data, **read_params)
 
@@ -37,6 +38,13 @@ params_ff = {
     },
 }
 spec.add_model('ff', params_ff)
+
+params_gauss = {
+    'mean_gaussian': {
+        'value': 6600.,
+    },
+}
+spec.add_model('gauss', params_gauss)
 
 fit_params = {
     # 'method': 'emcee',

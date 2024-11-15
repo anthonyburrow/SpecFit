@@ -23,7 +23,6 @@ jobs:
         run: |
           pip install ruff
           ruff check --output-format=github --target-version=py310
-          ruff --target-version=py310 .
         continue-on-error: true
       - name: Build and install
         run: pip install --verbose .

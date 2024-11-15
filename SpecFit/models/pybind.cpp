@@ -5,6 +5,7 @@
 #include "planck.hpp"
 #include "freeFree.hpp"
 #include "gaussian.hpp"
+#include "lorentzian.hpp"
 
 using namespace std;
 namespace py = pybind11;
@@ -31,5 +32,12 @@ PYBIND11_MODULE(SpecFitModels, module_handle) {
         &gaussian,
         py::arg("wave"), py::arg("mean_gaussian"), py::arg("std_gaussian"),
         py::arg("a_gaussian") = 1.0
+    );
+    // Lorentzian
+    module_handle.def(
+        "lorentzian",
+        &lorentzian,
+        py::arg("wave"), py::arg("mean_lorentzian"), py::arg("fwhm_lorentzian"),
+        py::arg("a_lorentzian") = 1.0
     );
 }

@@ -1,6 +1,6 @@
 import numpy as np
 
-from SpecFitModels import planck, ff, gaussian
+from SpecFitModels import planck, ff, gaussian, lorentzian
 from ..util.io import read_gaunt_params, read_gaunt_table
 
 
@@ -20,8 +20,6 @@ def ff_wrapper(
     wave: np.ndarray,
     T_ff: float,
     a_ff: float,
-    # gaunt_params: dict,
-    # gaunt_table: np.ndarray,
 ) -> np.ndarray:
     return ff(wave, T_ff, a_ff, GAUNT_PARAMS, GAUNT_TABLE)
 
@@ -35,6 +33,15 @@ def gaussian_wrapper(
     return gaussian(wave, mean_gaussian, std_gaussian, a_gaussian)
 
 
+def lorentzian_wrapper(
+    wave: np.ndarray,
+    mean_lorentzian: float,
+    fwhm_lorentzian: float,
+    a_lorentzian: float,
+) -> np.ndarray:
+    return lorentzian(wave, mean_lorentzian, fwhm_lorentzian, a_lorentzian)
+
+
 model_from_key = {
     # Planck function
     'planck': planck_wrapper,
@@ -45,4 +52,7 @@ model_from_key = {
     # Gaussian
     'gaussian': gaussian_wrapper,
     'gauss': gaussian_wrapper,
+    # Lorentzian
+    'lorentzian': lorentzian_wrapper,
+    'lorentz': lorentzian_wrapper,
 }

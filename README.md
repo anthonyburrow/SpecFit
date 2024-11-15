@@ -23,7 +23,7 @@ necessary for some models:
 - Free-free emission
 
 To retrieve this data, after cloning this repository, run the
-'SpecFit/SpecFit/data/retrieve.py' script. Currently, the script downloads the
+'./retrieve_data.py' script. Currently, the script downloads the
 following:
 
 - Gaunt factor table from [https://data.nublado.org/gauntff](https://data.nublado.org/gauntff)

@@ -1,15 +1,15 @@
 import pytest
 from pathlib import Path
 
-from SpecFit.data.retrieve import get_gaunt
+from retrieve_data import get_gaunt
 
 
-OUTPUT_DIR = './tests/output'
+OUTPUT_DIR = Path('./tests/output')
 
 
 def pytest_sessionstart(session):
     # Make directory for test output
-    Path(OUTPUT_DIR).mkdir(exist_ok=True)
+    OUTPUT_DIR.mkdir(exist_ok=True)
 
     # Download required modeling data
     get_gaunt()

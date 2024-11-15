@@ -2,12 +2,14 @@ from pathlib import Path
 import requests
 
 
-DATA_DIR = Path(__file__).parents[1].absolute() / 'data'
+DATA_DIR = Path(__file__).parents[0].absolute() / 'SpecFit' / 'data'
 
 
 def download(url: str, out_filename: Path):
     if out_filename.is_file():
         print(f'{out_filename} already retrieved.')
+
+    DATA_DIR.mkdir(exist_ok=True)
 
     response = requests.get(url)
 

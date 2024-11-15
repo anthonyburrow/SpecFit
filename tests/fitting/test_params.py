@@ -14,8 +14,8 @@ def test_params_default(spectrum_optical, T_representative):
 
     spec.add_model('bb')
     spec.fit()
-    params = spec.best_params
 
+    params = spec.best_params
     assert check_near_match(params['M0_T_planck'], T_representative)
 
 
@@ -34,8 +34,8 @@ def test_params_both(spectrum_optical, T_representative):
     }
     spec.add_model('bb', params_bb)
     spec.fit()
-    params = spec.best_params
 
+    params = spec.best_params
     assert check_near_match(params['M0_T_planck'], T_representative)
 
 
@@ -51,8 +51,8 @@ def test_params_one(spectrum_optical, T_representative):
     }
     spec.add_model('bb', params_bb)
     spec.fit()
-    params = spec.best_params
 
+    params = spec.best_params
     assert check_near_match(params['M0_T_planck'], T_representative)
 
 
@@ -62,8 +62,8 @@ def test_params_none(spectrum_optical, T_representative):
     params_bb = {}
     spec.add_model('bb', params_bb)
     spec.fit()
-    params = spec.best_params
 
+    params = spec.best_params
     assert check_near_match(params['M0_T_planck'], T_representative)
 
 
@@ -79,7 +79,7 @@ def test_params_wrong(spectrum_optical, T_representative):
     }
     spec.add_model('bb', params_bb)
     spec.fit()
-    params = spec.best_params
 
+    params = spec.best_params
     assert len(params) == 2
     assert check_near_match(params['M0_T_planck'], T_representative)

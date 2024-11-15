@@ -22,7 +22,7 @@ double interpLagrange(
 {
     double y = 0.0;
 
-    const size_t N = xTable.size();
+    const int N = static_cast<int>(xTable.size());
     for (int i = 0; i < N; i++)
     {
         double coeff = 1.0;

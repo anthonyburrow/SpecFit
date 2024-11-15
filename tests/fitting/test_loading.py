@@ -1,4 +1,4 @@
-from SpecFit.SpecFit import SpecFit
+from SpecFit import SpecFit
 
 
 def check_near_match(val_1, val_2):

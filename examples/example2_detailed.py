@@ -1,5 +1,5 @@
 import numpy as np
-from SpecFit.SpecFit import SpecFit
+from SpecFit import SpecFit
 
 
 # Manually read spectrum data if file has unusual format

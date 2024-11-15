@@ -60,7 +60,7 @@ with wave/flux/error as the first three columns) or just a `NumPy` array of the
 with wave/flux/error(optional) in the first 3 columns:
 
     ```python
-    from SpecFit.SpecFit import SpecFit
+    from SpecFit import SpecFit
 
     fn = 'my_spectrum.dat'
     optional_read_params = {

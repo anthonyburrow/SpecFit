@@ -1,4 +1,4 @@
-from SpecFit.SpecFit import SpecFit
+from SpecFit import SpecFit
 
 
 def test_default(output_dir, spectrum_optical):

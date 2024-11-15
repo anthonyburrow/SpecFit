@@ -36,7 +36,7 @@ py::array_t<double> gaussian(
 
     double w;
     const double arbitraryScale = 1e2;
-    const int dim = wave.strides(0) / 8;
+    const int dim = static_cast<int>(wave.strides(0)) / 8;
     for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
         w = wavePtr[i * dim];

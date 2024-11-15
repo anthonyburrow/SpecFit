@@ -41,7 +41,7 @@ py::array_t<double> planck(
 
     double w;
     const double arbitraryScale = 1e-7;
-    const int dim = wave.strides(0) / 8;
+    const int dim = static_cast<int>(wave.strides(0)) / 8;
     for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
         w = wavePtr[i * dim];

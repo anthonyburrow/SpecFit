@@ -147,7 +147,7 @@ py::array_t<double> jFF(
     double kappa;
     double w;
     const double arbitraryScale = 1e31;
-    const int dim = wave.strides(0) / 8;
+    const int dim = static_cast<int>(wave.strides(0)) / 8;
     for (int i = 0; i < waveBuffer.shape[0]; i++)
     {
         w = wavePtr[i * dim];

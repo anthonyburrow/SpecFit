@@ -1,5 +1,5 @@
 from pybind11.setup_helpers import Pybind11Extension, build_ext
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 import glob
 
 
@@ -16,6 +16,7 @@ ext_modules = [
 ]
 
 setup(
+    # Package info
     name='SpecFit',
     version=__version__,
     description='Spectrum fitter using lmfit.',
@@ -23,21 +24,25 @@ setup(
     author='Anthony Burrow',
     author_email='anthony.r.burrow@gmail.com',
     license='MIT',
-    include_package_data=True,
-    package_data={
-        'SpecFit': ['data/*.dat']
-    },
-    install_requires=['numpy', 'scipy', 'lmfit'],
-    optional=['matplotlib'],
-    packages=find_packages(),
-    ext_modules=ext_modules,
-    extras_require={'test': ['pytest', 'requests']},
-    cmdclass={'build_ext': build_ext},
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Topic :: Scientific/Engineering :: Physics',
         'Intended Audience :: Science/Research',
-    ]
+    ],
+    # Dependencies
+    install_requires=['numpy', 'scipy', 'lmfit'],
+    optional=['matplotlib'],
+    extras_require={'test': ['pytest', 'requests']},
+    # Package installation
+    packages=find_namespace_packages(where='SpecFit'),
+    package_dir={'': 'SpecFit'},
+    include_package_data=True,
+    package_data={
+        'SpecFit.data': ['*.dat']
+    },
+    # External
+    ext_modules=ext_modules,
+    cmdclass={'build_ext': build_ext},
 )

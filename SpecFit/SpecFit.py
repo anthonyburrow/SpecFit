@@ -114,7 +114,7 @@ class SpecFit:
             self.model += model_obj
 
         for param in model_obj.param_names:
-            param_no_prefix = '_'.join(param.split('_')[1:])
+            param_no_prefix = self._remove_prefix(param)
             if params is None:
                 param_func = default_params[param_no_prefix]
                 param_info = param_func(self.data)
@@ -214,9 +214,16 @@ class SpecFit:
     def best_fit(self):
         return self.result.best_fit
 
+    @property
+    def best_params(self):
+        return self.result.best_values
+
     def _parse_model(self, model: str | Callable) -> Callable:
         """Retrieve the function from premade function keys."""
         if model in model_from_key:
             return model_from_key[model]
 
         return model
+
+    def _remove_prefix(self, param):
+        return '_'.join(param.split('_')[1:])

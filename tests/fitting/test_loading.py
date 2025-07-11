@@ -15,7 +15,7 @@ def test_smoothing(spectrum_optical, T_representative):
     }
     spec = SpecFit(spectrum_optical, **read_params)
 
-    assert spec.data[:, 1].max() == 1.
+    assert spec.spectrum.flux.max() == 1.
 
     spec.add_model('bb')
     spec.fit()

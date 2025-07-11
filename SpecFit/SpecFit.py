@@ -3,8 +3,7 @@ from typing import Callable
 from lmfit import Model, Parameters
 from lmfit.model import ModelResult
 
-from SpectrumCore.io import read
-from SpectrumCore.processing import preprocess, smooth
+from SpectrumCore import Spectrum
 from SpectrumCore.plot import plot_spectrum
 
 from .models.wrappers import model_from_key
@@ -13,8 +12,7 @@ from .util.default_params import default_params
 
 class SpecFit:
 
-    def __init__(self, data: str | np.ndarray, wave_units: str = None,
-                 *args, **kwargs):
+    def __init__(self, data: str | np.ndarray, *args, **kwargs):
         """Instantiate the `SpecFit` object.
 
         Parameters
@@ -27,58 +25,30 @@ class SpecFit:
             values, respectively. If an array is provided, it must be of shape
             (N, 2) or (N, 3), with columns provided as wavelength, flux, and
             (optionally) flux uncertainty.
-        wave_units : str, optional
-            Units for the wavelengths provided in `data`. Options are
-            'angstroms' or 'microns'; by default, 'angstroms' is assumed.
         **kwargs
-            Arguments to pass to `SpectrumCore.processing.preprocess()`:
-                z : float, optional
-                    Redshift value for rest-frame wavelength correction.
-                wave_range : tuple[float], optional
-                    The wavelength range of the input spectrum to use in
-                    Angstroms. By default, the full spectrum is used.
-                remove_nans : bool, optional
-                    Removes all rows that contain any NaN value. By default,
-                    this is `True`.
-                remove_nonpositive : bool, optional
-                    Removes all rows with flux values less than or equal to 0.
-                    By default, this is `True`.
-                remove_telluric : bool, optional
-                    Remove a set of telluric features (see
-                    `SpectrumCore.physics.telluric`) before correcting for host
-                    redshift.
-                host_EBV : float, optional
-                    Host galaxy color excess used for dereddening.
-                host_RV : float, optional
-                    Host reddening vector used for dereddening.
-                MW_EBV : float, optional
-                    Milky-Way galaxy color excess used for dereddening.
-                MW_RV : float, optional
-                    Milky-Way reddening vector used for dereddening. Default is
-                    assumed as 3.1.
+            wave_unit : str, optional
+                Unit of wavelength for the input data. Available units are
+                'angstrom' and 'micron'. If None, this defaults to 'angstrom'.
+            remove_telluric: bool, optional
+                Remove telluric features. Default is False.
+            z : float, optional
+                Redshift value for rest-frame wavelength correction.
+            wave_range : tuple, optional
+                Manually-set pruning window in Angstroms. Default is None.
+            host_EBV : float, optional
+                Host galaxy color excess used for dereddening.
+            host_RV : float, optional
+                Host reddening vector used for dereddening.
+            MW_EBV : float, optional
+                MW galaxy color excess used for dereddening.
+            MW_RV : float, optional
+                MW reddening vector used for dereddening. Default is 3.1.
+            smooth_method: str, optional
+                Method of smoothing the input spectrum. Can use 'boxcar' or
+                'sg' (Savitzky–Golay filter).
         """
-        if isinstance(data, str):
-            self.data = read(data)
-        else:
-            # data = data.copy()
-            self.data = data
-
-        if wave_units is None:
-            wave_units = 'angstroms'
-
-        if wave_units == 'microns':
-            self.data[:, 0] *= 1.e4
-
-        # Preprocess and smooth (normalize at the end)
-        self.data = preprocess(self.data, *args, **kwargs)
-        self.data = smooth(self.data, *args, **kwargs)
-
-        norm_args = {
-            'remove_nans': False,
-            'remove_nonpositive': False,
-            'normalize': True,
-        }
-        self.data = preprocess(self.data, **norm_args)
+        self.spectrum = Spectrum(data, *args, **kwargs)
+        self._preprocess_spectrum()
 
         self.model = None
         self.params = Parameters()
@@ -117,14 +87,14 @@ class SpecFit:
             param_no_prefix = self._remove_prefix(param)
             if params is None:
                 param_func = default_params[param_no_prefix]
-                param_info = param_func(self.data)
+                param_info = param_func(self.spectrum.data)
                 self.params.add(param, **param_info)
             elif param_no_prefix in params:
                 param_info = params[param_no_prefix]
                 self.params.add(param, **param_info)
             elif param_no_prefix in default_params:
                 param_func = default_params[param_no_prefix]
-                param_info = param_func(self.data)
+                param_info = param_func(self.spectrum.data)
                 self.params.add(param, **param_info)
             else:
                 print(f'{param} not given an initial value.')
@@ -151,12 +121,12 @@ class SpecFit:
             The `ModelResult` object given by `lmfit.Model.fit()`.
         """
         if weights is None or weights == 'log':
-            weights = 1. / self.data[:, 1]
+            weights = 1. / self.spectrum.flux
         elif weights == 'none':
             weights = None
 
         result = self.model.fit(
-            self.data[:, 1], self.params, wave=self.data[:, 0],
+            self.spectrum.flux, self.params, wave=self.spectrum.wave,
             weights=weights,
             *args, **kwargs
         )
@@ -207,7 +177,7 @@ class SpecFit:
             plot (fig, ax). If `residuals=True`, a third item is returned as
             well for the residual plot `pyplot.axis` (fig, ax, ax_res).
         """
-        return plot_spectrum(self.data, model_result=self.result,
+        return plot_spectrum(self.spectrum.data, model_result=self.result,
                              *args, **kwargs)
 
     @property
@@ -217,6 +187,42 @@ class SpecFit:
     @property
     def best_params(self):
         return self.result.best_values
+
+    def _preprocess_spectrum(
+        self,
+        z: float | None = None,
+        wave_range: tuple[float] | None = None,
+        remove_telluric=False,
+        host_EBV: float | None = None,
+        host_RV: float | None = None,
+        MW_EBV: float | None = None,
+        MW_RV: float = 3.1,
+        *args,
+        **kwargs,
+    ) -> None:
+        self.spectrum.remove_nans()
+        self.spectrum.remove_nonpositive()
+
+        if remove_telluric:
+            self.spectrum.remove_telluric()   # TODO: AFTER MANGLING
+
+        if z is not None and z != 0.:
+            self.spectrum.deredshift(z)
+
+        if wave_range is not None:
+            self.spectrum.prune(wave_range)
+
+        # Milky Way extinction
+        if MW_EBV is not None and MW_EBV != 0. and MW_RV is not None:
+            self.spectrum.deredden(E_BV=MW_EBV, R_V=MW_RV)
+
+        # Host extinction
+        if host_EBV is not None and host_EBV != 0. and host_RV is not None:
+            self.spectrum.deredden(E_BV=host_EBV, R_V=host_RV)
+
+        self.spectrum.smooth(*args, **kwargs)
+
+        self.spectrum.normalize_flux(method='max')
 
     def _parse_model(self, model: str | Callable) -> Callable:
         """Retrieve the function from premade function keys."""

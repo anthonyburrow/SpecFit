@@ -36,8 +36,9 @@ setup(
     optional=['matplotlib'],
     extras_require={'test': ['pytest', 'requests']},
     # Package installation
-    packages=find_namespace_packages(where='SpecFit'),
-    package_dir={'': 'SpecFit'},
+    # packages=find_namespace_packages(where='SpecFit'),
+    # package_dir={'': 'SpecFit'},
+    packages=find_namespace_packages(),
     include_package_data=True,
     package_data={
         'SpecFit.data': ['*.dat']

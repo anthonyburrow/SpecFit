@@ -9,7 +9,7 @@ data = np.loadtxt(fn, usecols=(0, 2, 3), skiprows=1)
 # Load and preprocess spectrum
 read_params = {
     'z': 0.0008,
-    'wave_units': 'microns',
+    'wave_unit': 'microns',
     'smooth_method': 'boxcar',
 }
 spec = SpecFit(data, **read_params)

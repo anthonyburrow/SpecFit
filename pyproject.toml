@@ -1,6 +1,41 @@
 [build-system]
 requires = [
-    "setuptools",
+    "setuptools>=64",
     "pybind11>=2.10.0"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "SpecFit"
+version = "0.0.1"
+description = "Spectrum fitter using lmfit."
+readme = "README.md"
+authors = [
+    { name = "Anthony Burrow", email = "anthony.r.burrow@gmail.com" }
+]
+license = { text = "MIT" }
+urls = { Homepage = "https://github.com/anthonyburrow/SpecFit" }
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Intended Audience :: Science/Research",
+]
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "lmfit",
+    "SpectrumCore @ git+https://github.com/anthonyburrow/SpectrumCore.git",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "requests", "matplotlib"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["SpecFit*"]
+
+[tool.setuptools.package-data]
+"SpecFit.data" = ["*.dat"]
